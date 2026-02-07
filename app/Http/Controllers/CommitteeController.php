@@ -67,6 +67,22 @@ class CommitteeController extends Controller
             return response()->json(['error' => 500, 'msg' => 'error del servidor']);
 
         }
+    }
+    
+    public function delete(string $id){
+        try{
+            $delete = $this->committeeService->delete($id);
+            if($delete){
+                $res = [
+                    'error' => 0,
+                    'msg' => 'delete'
+                ];
+                return response()->json($res,200);
+            }
+        }catch(\Exception $e){
+            return response()->json(['error' => 500, 'msg' => 'error del servidor']);
+
+        }
 
     }
 }

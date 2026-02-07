@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 use App\Models\Committee;
+use COM;
 use Illuminate\Support\Facades\Crypt;
 
 class CommitteeService{
@@ -40,6 +41,12 @@ class CommitteeService{
             return Committee::where('id', '=', $idDecrypted)->update($committee);
         }
 
+    }
+
+    public function delete(string $id){
+        $idDecrypted = Crypt::decrypt($id);
+         Committee::where('id', '=', $idDecrypted)->delete();
+         return true;
     }
 }
 
