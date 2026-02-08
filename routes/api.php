@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComunityController;
 use App\Http\Controllers\CouncilController;
+use App\Http\Controllers\privilegesController;
 use App\Http\Controllers\roleController;
 use App\Models\Council;
 
@@ -32,3 +33,8 @@ Route::post('/roles',[roleController::class, 'store']);
 Route::get('/roles', [roleController::class, 'findAll']);
 Route::put('/roles/{id}',[roleController::class, 'update']);
 Route::delete('roles/{id}',[roleController::class, 'delete']);
+
+Route::post('/privileges',[privilegesController::class, 'store']);
+Route::get('/privileges',[privilegesController::class, 'findAll']);
+Route::put('privileges/{id}',[privilegesController::class, 'update']);
+Route::delete('privileges/{id}', [privilegesController::class, 'delete']);
