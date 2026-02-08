@@ -7,6 +7,7 @@ use App\Http\Controllers\ComunityController;
 use App\Http\Controllers\CouncilController;
 use App\Http\Controllers\privilegesController;
 use App\Http\Controllers\roleController;
+use App\Http\Controllers\rolePrivilegeController;
 use App\Models\Council;
 
 Route::get('/user', function (Request $request) {
@@ -38,3 +39,6 @@ Route::post('/privileges',[privilegesController::class, 'store']);
 Route::get('/privileges',[privilegesController::class, 'findAll']);
 Route::put('privileges/{id}',[privilegesController::class, 'update']);
 Route::delete('privileges/{id}', [privilegesController::class, 'delete']);
+
+Route::get('rolesPrivileges/{roleId}', [rolePrivilegeController::class, 'findPrivilegeByRoleId']);
+Route::post('/rolesPrivileges', [rolePrivilegeController::class, 'store']);
