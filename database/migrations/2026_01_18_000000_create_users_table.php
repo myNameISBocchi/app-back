@@ -32,9 +32,7 @@ return new class extends Migration
             )->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->foreignId('roleId')->constrained(
-                table:'roles', indexName:'users_roles_id'
-            );
+            
             $table->string('photoUser')->nullable();
             $table->boolean('status')->default(1);
             $table->rememberToken();
