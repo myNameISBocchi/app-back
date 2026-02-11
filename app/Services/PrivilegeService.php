@@ -15,7 +15,7 @@ class PrivilegeService{
     }
 
     public function findAll(){
-        $findAll = Privilege::select('id', 'privilegeName')->get(
+        $findAll = Privilege::select('id', 'privilegeName', 'route')->get(
         )->map(function($privilegeObject){
             $used = RolePrivilege::where('privilegeId', '=', $privilegeObject->id)->first();
             if($used){

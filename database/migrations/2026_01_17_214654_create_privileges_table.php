@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('privileges', function (Blueprint $table) {
             $table->id();
             $table->string('privilegeName');
+            $table->string('route');
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }
