@@ -10,6 +10,5 @@ class Council extends Model
         'councilName',
         'comunityId',
         'googleMaps',
-        'photoCouncil'
     ];
 }

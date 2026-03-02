@@ -18,13 +18,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('identification');
             $table->string('phone');
-            $table->foreignId('countryId')->constrained(
-                table:'countries', indexName:'users_countries_id'
+            $table->foreignId('cityId')->constrained(
+                table:'cities', indexName:'users_cities_id'
             );
-            $table->foreignId('committeeId')->constrained(
-                table:'council_committees', indexName:'users_councilCommittee_id'
-            );
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('photoUser')->nullable();
             $table->boolean('status')->default(1);

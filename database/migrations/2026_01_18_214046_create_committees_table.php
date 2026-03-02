@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('council_committees', function (Blueprint $table) {
+        Schema::create('committees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('councilId')->constrained(
-                table:'councils', indexName:'council_id'
-            );
             $table->foreignId('unitId')->constrained(
-                table:'units', indexName:'unit_id'
+                table: 'units', indexName: 'committe_unit_id'
             );
-            $table->string('committeeName');
+            $table->string('nameCommittee');
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('council_committees');
+        Schema::dropIfExists('committees');
     }
 };

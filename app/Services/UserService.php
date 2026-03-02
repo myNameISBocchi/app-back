@@ -14,10 +14,7 @@ class UserService{
         if($duplicate){
             return false;
         }else{
-            $user['comunitieId'] = Crypt::decrypt($user['comunitieId']);
-            $user['councilId'] = Crypt::decrypt($user['councilId']);
-            $user['committeeId'] = Crypt::decrypt($user['committeeId']);
-            $user['countryId'] = Crypt::decrypt($user['countryId']);
+            $user['cityId'] = Crypt::decrypt($user['cityId']);
             $user =  User::create($user);
 
             UserRole::where('userId',$user->id)->delete();
@@ -41,50 +38,26 @@ class UserService{
         'email',
         'identification',
         'phone',
-        'countryId',
-        'comunitieId as comunityId',
-        'councilId as consejoId',
-        'committeeId as comiteId',
-        'comunities.comunityName',
-        'councils.councilName',
-        'committees.committeeName',
+        'cityId',
         'cities.cityName as city',
         'countries.countryName as country',
         'states.stateName as state',
         'status'
-        )->join('comunities', 'users.comunitieId', '=', 'comunities.id'
         )->join(
-            'councils', 'users.councilId', '=', 'councils.id'
+            'cities', 'users.cityId', '=', 'cities.id'
         )->join(
-            'committees', 'users.committeeId','=', 'committees.id'
-        )->join(
-            'countries', 'users.countryId', '=', 'countries.id'
-        )->join(
-            'states', 'cities.stateId', '=', 'states.id'
-        )->join(
-            'countries', 'cities.countryId', '=', 'countries.id'
+            'states', 'cities.stateId', '=', 'states.id'  
+        )->join(  
+            'countries', 'states.countryId', '=', 'countries.id' 
         )->get()->map(function($item){
             $userIdEncrypt = Crypt::encrypt($item->userId);
-            $roleIdEncrypt = Crypt::encrypt($item->roleId);
-            $comunityIdEncrypt = Crypt::encrypt($item->comunityId);
-            $consejoIdEncrpt = Crypt::encrypt($item->consejoId);
-            $comiteIdEncrypt = Crypt::encrypt($item->comiteId);
+            unset($item->userId);
+            $item->userId = $userIdEncrypt;
             $item->locality = [
                 'city' => $item->city,
                 'country' => $item->country,
                 'state' => $item->state
             ];
-            unset($item->roleId);
-            unset($item->userId);
-            unset($item->comunityId);
-            unset($item->consejoId);
-            unset($item->comiteId);
-            $item->roleId = $roleIdEncrypt;
-            $item->userId = $userIdEncrypt;
-            $item->comunityId = $comunityIdEncrypt;
-            $item->councilId = $consejoIdEncrpt;
-            $item->committeeId = $comiteIdEncrypt;
-           
             return $item;
         })->toArray();
         return $result;

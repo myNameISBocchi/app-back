@@ -17,14 +17,12 @@ class CouncilSeeder extends Seeder
             [
                 'councilName' => 'SEMILLAS',
                 'comunityId' => 1,
-                'googleMaps' => 'http/direccion/inventada/del/estado/zulia/Maracaibo',
-                'photoCouncil' => 'No hay'
+                'googleMaps' => 'http/direccion/inventada/del/estado/zulia/Maracaibo'
             ],
             [
                 'councilName' => 'ARBOLES',
                 'comunityId' => 2,
-                'googleMaps' => 'https/jardin/botanico',
-                'photoCouncil' => 'No hay'
+                'googleMaps' => 'https/jardin/botanico'
             ]
         ];  
         Council::insert($arrCouncil);
