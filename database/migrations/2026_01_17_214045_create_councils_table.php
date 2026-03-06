@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('councils', function (Blueprint $table) {
             $table->id();
+            $table->string('councilName');
             $table->foreignId('comunityId')->constrained(
                 table:'comunities', indexName: 'councils_comunity_id'
             );
-              $table->string('councilName');
-            $table->string('googleMaps');
+            $table->foreignId('cityId')->constrained(
+                table:'cities', indexName:'coucils_cities_id'
+            );
+            $table->string('googleMaps')->nullable();
             $table->timestamps();
         });
     }

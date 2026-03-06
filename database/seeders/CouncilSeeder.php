@@ -15,14 +15,16 @@ class CouncilSeeder extends Seeder
     {
         $arrCouncil = [
             [
-                'councilName' => 'SEMILLAS',
+                'councilName' => 'SAN MAGALLAN',
                 'comunityId' => 1,
-                'googleMaps' => 'http/direccion/inventada/del/estado/zulia/Maracaibo'
+                'googleMaps' => 'http/direccion/inventada/del/estado/zulia/Maracaibo',
+                'cityId' => 1
             ],
             [
-                'councilName' => 'ARBOLES',
+                'councilName' => 'ARBOLES DEL TORO',
                 'comunityId' => 2,
-                'googleMaps' => 'https/jardin/botanico'
+                'googleMaps' => 'https/jardin/botanico',
+                'cityId' => 1
             ]
         ];  
         Council::insert($arrCouncil);

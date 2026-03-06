@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('comunities', function (Blueprint $table) {
             $table->id();
             $table->string("comunityName");
-            $table->string("googleMaps");
+            $table->string("googleMaps")->nullable();
             $table->string("photoComunity")->nullable();
             $table->timestamps();
         });
