@@ -57,29 +57,34 @@ class ComunityService{
 
     }
     
-     public function uploadPhoto(string $id, $file){
-        $idDecrypted = Crypt::decrypt($id);
-
-        $comunity = Comunity::find($idDecrypted);
-        if(!$comunity){
-            return false;
-        }
-
-        if($comunity->photoComunity){
-            $oldPath = str_replace('storage/', '', $comunity->photoComunity);
-        Storage::disk('public')->delete($oldPath);
-        }
-        $extension = $file->getClientOriginalExtension();
-        $fileName = $idDecrypted .'.'. $extension;
-
-        $path = $file->storeAs('comunities', $fileName, 'public');
-
-         $comunity->photoComunity = 'storage/' . $path;
-    $comunity->save();
-        
-        return $comunity;
-
+     public function uploadPhoto(int $id, $file) {
+    $comunity = Comunity::find($id);
+    
+    if (!$comunity) {
+        return false;
     }
+
+  
+    if ($comunity->photoComunity && $comunity->photoComunity !== 'MONTE') {
+        $oldPath = str_replace('storage/', '', $comunity->photoComunity);
+        if (Storage::disk('public')->exists($oldPath)) {
+            Storage::disk('public')->delete($oldPath);
+        }
+    }
+
+    
+    $extension = $file->getClientOriginalExtension();
+    $fileName = $id . '_' . time() . '.' . $extension;
+
+    
+    $path = $file->storeAs('comunities', $fileName, 'public');
+
+    
+    $comunity->photoComunity = 'storage/' . $path;
+    $comunity->save();
+    
+    return $comunity;
+}
          
 
 }

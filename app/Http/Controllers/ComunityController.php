@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Comunity;
 use App\Services\ComunityService;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt; // Asegúrate de tener esta importación
 
 class ComunityController extends Controller
 {
@@ -110,16 +110,22 @@ class ComunityController extends Controller
 
     }
 
-    public function uploadPhoto(request $req, $id){
+    // ESTA ES LA FUNCIÓN CORREGIDA
+    public function uploadPhoto(Request $req, $id){
         try{
 
             $req->validate([
                 'photoComunity' => 'required|image|mimes:png,jpg,jpeg|max:2048',
             ]); 
 
+            $idDecrypted = Crypt::decrypt($id);
+
             if($req->hasFile('photoComunity')){
                 $file = $req->file('photoComunity');
-                $upload = $this->ComunityService->uploadPhoto($id,$file);
+                
+                
+                $upload = $this->ComunityService->uploadPhoto($idDecrypted, $file);
+                
                 if($upload){
                     $res = [
                         'error' => 0,
@@ -131,10 +137,8 @@ class ComunityController extends Controller
             return response()->json(['error' => 1, 'msg' => 'no se pudo guardar']);
 
         }catch(\Exception $e){
+            // Mantenemos tu estructura de error original
             return response()->json(['error' => 500, 'msg' => $e->getMessage()], 500);
-
         }
-       
-    
     }
 }
