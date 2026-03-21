@@ -68,7 +68,7 @@ class PersonService{
     }
     public function findAll(){
         $all = Person::select(
-            'person.id as personId',
+            'peoples.id as personId',
             'firstName',
             'lastName',
             'identification',
@@ -76,13 +76,13 @@ class PersonService{
             'status',
             'date',
             'cityName as city',
-            'person.cityId as cityId',
+            'peoples.cityId as cityId',
             'countries.countryName as country',
             'states.stateName as state',
             'photoPerson'
-        )->join('cities', 'person.cityId', '=', 'cities.id'
-        )->join('states', 'person.stateId', '=', 'states.id'
-        )->join('countries','person.countryId','=','countries.id')->get()->map(function($item){
+        )->join('cities', 'peoples.cityId', '=', 'cities.id'
+        )->join('states', 'cities.stateId', '=', 'states.id'
+        )->join('countries','states.countryId','=','countries.id')->get()->map(function($item){
             $blockedResult = PersonRole::select('id')->where('personId', '=', $item->personId)->first();
             if($blockedResult){
                 $item->blocked = 1;
@@ -96,6 +96,9 @@ class PersonService{
             ];
             $personIdEncrypt = Crypt::encrypt($item->personId);
             $cityIdEncrypt = Crypt::encrypt($item->cityId);
+            unset($item->city);
+            unset($item->country);
+            unset($item->state);
             unset($item->personId);
             unset($item->cityId);
             $item->personId = $personIdEncrypt;

@@ -32,4 +32,23 @@ class personController extends Controller
             return response()->json(['error' => 500, Message::errorServer()]);
         }
     }
+    public function findAll(){
+        try{
+            $findAll = $this->personService->findAll();
+            if($findAll){
+                $res = [
+                    'error'=> 0,
+                    'results' => $findAll
+
+                ];
+                return response()->json($res,200);
+
+            }
+
+        }catch(\Exception $e){
+            dd($e);
+            return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
+
+        }
+    }
 }
