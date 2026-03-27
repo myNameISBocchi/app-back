@@ -130,7 +130,7 @@ class PersonService{
             'status',
             'date',
             'cityName as city',
-            'peoples.cityId as cityId',
+            //'peoples.cityId as cityId',
             'countries.countryName as country',
             'states.stateName as state',
             'photoPerson',
