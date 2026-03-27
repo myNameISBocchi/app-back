@@ -46,7 +46,6 @@ class PersonService{
                     'comunityId' => Crypt::decrypt($idComunity)
                 ]);
             }
-
             if(!empty($idCouncil)){
                 PersonCouncil::create([
                     'personId' => $newPerson->id,
@@ -64,7 +63,6 @@ class PersonService{
             
             return true;
         }
-
     }
     public function findAll(){
         $all = Person::select(
@@ -87,22 +85,14 @@ class PersonService{
         )->join('cities', 'peoples.cityId', '=', 'cities.id'
         )->join('states', 'cities.stateId', '=', 'states.id'
         )->join('countries','states.countryId','=','countries.id'
-        )->join(
-            'peoples_comunities', 'peoples.id', '=', 'peoples_comunities.personId'
-        )->join(
-            'comunities', 'peoples_comunities.comunityId', '=', 'comunities.id'
-        )->join(
-            'peoples_councils', 'peoples.id', '=', 'peoples_councils.personId'
-        )->join(
-            'councils', 'peoples_councils.councilId', '=', 'councils.id'
-        )->join(
-            'peoples_committees', 'peoples.id', '=', 'peoples_committees.personId'
-        )->join(
-            'committees', 'peoples_committees.committeeId', '=', 'committees.id'
-        )->join(
-            'peoples_roles', 'peoples.id', '=', 'peoples_roles.personId'
-        )->join(
-            'roles', 'peoples_roles.roleId', 'roles.id'
+        )->join('peoples_comunities', 'peoples.id', '=', 'peoples_comunities.personId'
+        )->join('comunities', 'peoples_comunities.comunityId', '=', 'comunities.id'
+        )->join('peoples_councils', 'peoples.id', '=', 'peoples_councils.personId'
+        )->join('councils', 'peoples_councils.councilId', '=', 'councils.id'
+        )->join('peoples_committees', 'peoples.id', '=', 'peoples_committees.personId'
+        )->join('committees', 'peoples_committees.committeeId', '=', 'committees.id'
+        )->join('peoples_roles', 'peoples.id', '=', 'peoples_roles.personId'
+        )->join('roles', 'peoples_roles.roleId', 'roles.id'
         )->get()->map(function($item){
             $blockedResult = PersonRole::select('id')->where('personId', '=', $item->personId)->first();
             if($blockedResult){
