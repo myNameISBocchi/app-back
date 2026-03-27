@@ -51,4 +51,29 @@ class personController extends Controller
 
         }
     }
+
+    public function findById(string $id){
+        try{
+            $error = 0;
+            $findById = $this->personService->findById($id);
+            if($findById){
+                $res = [
+                    'error' => $error,
+                    'msg' => Message::findById(),
+                    'results' => $findById
+                ];
+                return response()->json($res,200);
+            }else{
+                $res = [
+                    'error' => 1,
+                    'msg' => 'User not found'
+                ];
+                return response()->json($res,500);
+            }
+        }catch(\Exception $e){
+            dd($e);
+            return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
+        }
+
+    }
 }

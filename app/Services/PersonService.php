@@ -117,7 +117,44 @@ class PersonService{
             return $item;
         });
         return $all;
+    }
 
+    public function findById(string $id){
+        $idDecrypted = Crypt::decrypt($id);
+        $findPerson = Person::select(
+            //'peoples.id as personId',
+            'firstName',
+            'lastName',
+            'identification',
+            'phone',
+            'status',
+            'date',
+            'cityName as city',
+            'peoples.cityId as cityId',
+            'countries.countryName as country',
+            'states.stateName as state',
+            'photoPerson',
+            'comunities.comunityName',
+            'councils.councilName',
+            'committees.committeeName',
+            'roles.roleName'
+        )->join('cities', 'peoples.cityId', '=', 'cities.id'
+        )->join('states', 'cities.stateId', '=', 'states.id'
+        )->join('countries','states.countryId','=','countries.id'
+        )->join('peoples_comunities', 'peoples.id', '=', 'peoples_comunities.personId'
+        )->join('comunities', 'peoples_comunities.comunityId', '=', 'comunities.id'
+        )->join('peoples_councils', 'peoples.id', '=', 'peoples_councils.personId'
+        )->join('councils', 'peoples_councils.councilId', '=', 'councils.id'
+        )->join('peoples_committees', 'peoples.id', '=', 'peoples_committees.personId'
+        )->join('committees', 'peoples_committees.committeeId', '=', 'committees.id'
+        )->join('peoples_roles', 'peoples.id', '=', 'peoples_roles.personId'
+        )->join('roles', 'peoples_roles.roleId', 'roles.id'
+        )->where('peoples.id', '=', $idDecrypted)->first();
+        if($findPerson){
+            return $findPerson;
+        }else{
+            return false;
+        }
     }
 }
 
