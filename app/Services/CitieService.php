@@ -29,7 +29,7 @@ class CitieService{
 
     public function update (string $id, array $citie){
         $idDecrypted = Crypt::decrypt($id);
-        $findCitie = Citie::where([
+        $findCitie = Citie::select('id')->where([
             ['id', '!=', $idDecrypted],
             ['cityName', '=', $citie['cityName']]
         ])->first();

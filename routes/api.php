@@ -52,6 +52,7 @@ Route::post('/rolesPrivileges', [rolePrivilegeController::class, 'store']);
 Route::post('/peoples', [personController::class, 'store']);
 Route::get('/peoples', [personController::class, 'findAll']);
 Route::get('/peoples/{id}',[personController::class, 'findById']);
+Route::put('/peoples/{id}',[personController::class, 'update']);
 
 Route::post('/countries',[countryController::class, 'store']);
 Route::get('/countries',[countryController::class, 'findAll']);

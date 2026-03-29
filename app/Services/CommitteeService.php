@@ -30,7 +30,7 @@ class CommitteeService{
 
     public function update(string $id, array $committee){
         $idDecrypted = Crypt::decrypt($id);
-        $duplicado = Committee::where([
+        $duplicado = Committee::select('id')->where([
             ['id', '!=', $idDecrypted],
             ['committeeName', '=', $committee['committeeName']],
         ])->first();

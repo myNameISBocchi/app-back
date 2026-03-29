@@ -74,6 +74,28 @@ class personController extends Controller
             dd($e);
             return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
         }
+    }
+
+    public function update(string $id, Request $req){
+        try{
+            $update = $this->personService->update($id, $req->input());
+            if($update){
+                $res = [
+                    'error' => 0,
+                    'msg' => Message::updated()
+                ];
+                return response()->json($res,200);
+            }else{
+                $res = [
+                    'error' => 1,
+                    'msg' => Message::duplicate()
+                ];
+                return response()->json($res,500);
+            }
+        }catch(\Exception $e){
+            dd($e);
+                return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
+        }
 
     }
 }

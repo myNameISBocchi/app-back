@@ -33,7 +33,7 @@ class CountryService{
 
     public function update(string $id, array $country){
         $idDcrypted = Crypt::decrypt($id);
-        $duplicate = Country::where([
+        $duplicate = Country::select('id')->where([
             ['id', '!=', $idDcrypted],
             ['countryName', '=', $country['countryName']],
         ])->first();

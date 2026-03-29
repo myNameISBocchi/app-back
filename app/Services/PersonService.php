@@ -6,6 +6,7 @@ use App\Models\PersonComunity;
 use App\Models\PersonCouncil;
 use App\Models\PersonRole;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class PersonService{
     public function store(array $person){
@@ -73,6 +74,7 @@ class PersonService{
             'phone',
             'status',
             'date',
+            'email',
             'cityName as city',
             'peoples.cityId as cityId',
             'countries.countryName as country',
@@ -81,7 +83,6 @@ class PersonService{
             'comunities.comunityName',
             'councils.councilName',
             'committees.committeeName',
-            'roles.roleName'
         )->join('cities', 'peoples.cityId', '=', 'cities.id'
         )->join('states', 'cities.stateId', '=', 'states.id'
         )->join('countries','states.countryId','=','countries.id'
@@ -91,10 +92,12 @@ class PersonService{
         )->join('councils', 'peoples_councils.councilId', '=', 'councils.id'
         )->join('peoples_committees', 'peoples.id', '=', 'peoples_committees.personId'
         )->join('committees', 'peoples_committees.committeeId', '=', 'committees.id'
-        )->join('peoples_roles', 'peoples.id', '=', 'peoples_roles.personId'
-        )->join('roles', 'peoples_roles.roleId', 'roles.id'
         )->get()->map(function($item){
-            $blockedResult = PersonRole::select('id')->where('personId', '=', $item->personId)->first();
+            $roles = DB::table('peoples_roles'
+            )->join('roles', 'peoples_roles.roleId', '=', 'roles.id')->where('personId', '=', $item->personId
+            )->pluck('roleName')->toArray();
+            $item->roleName = implode(', ', $roles);
+             $blockedResult = PersonRole::select('id')->where('personId', '=', $item->personId)->first();
             if($blockedResult){
                 $item->blocked = 1;
             }else{
@@ -129,6 +132,7 @@ class PersonService{
             'phone',
             'status',
             'date',
+            'email',
             'cityName as city',
             //'peoples.cityId as cityId',
             'countries.countryName as country',
@@ -137,7 +141,7 @@ class PersonService{
             'comunities.comunityName',
             'councils.councilName',
             'committees.committeeName',
-            'roles.roleName'
+            //'roles.roleName'
         )->join('cities', 'peoples.cityId', '=', 'cities.id'
         )->join('states', 'cities.stateId', '=', 'states.id'
         )->join('countries','states.countryId','=','countries.id'
@@ -147,14 +151,26 @@ class PersonService{
         )->join('councils', 'peoples_councils.councilId', '=', 'councils.id'
         )->join('peoples_committees', 'peoples.id', '=', 'peoples_committees.personId'
         )->join('committees', 'peoples_committees.committeeId', '=', 'committees.id'
-        )->join('peoples_roles', 'peoples.id', '=', 'peoples_roles.personId'
-        )->join('roles', 'peoples_roles.roleId', 'roles.id'
         )->where('peoples.id', '=', $idDecrypted)->first();
-        if($findPerson){
-            return $findPerson;
-        }else{
-            return false;
-        }
+        if(!$findPerson) return false;
+        $findPerson->roles = DB::table('peoples_roles')->join('roles', 'peoples_roles.roleId', 'roles.id'
+        )->where('personId', $idDecrypted)->pluck('roleName')->toArray();
+        return $findPerson;
+    }
+    public function update(string $id, array $person){
+        $idDecrypted = Crypt::decrypt($id);
+        $duplicate = Person::select('id')->where([
+            ['id', '!=',$idDecrypted],
+            ['identification', $person['identification']],
+            ['phone', $person['phone']],
+            ])->first();
+            if(!$duplicate){
+                $person['cityId'] = Crypt::decrypt($person['cityId']);
+                return Person::where('id', $idDecrypted)->update($person);
+            }else{
+                return false;
+            }
+
     }
 }
 

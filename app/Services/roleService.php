@@ -35,7 +35,7 @@ class RoleService{
 
     public function update(string $id, array $role){
         $idDecrypted = Crypt::decrypt($id);
-        $repet = Role::where([
+        $repet = Role::select('id')->where([
             ['id', '!=', $idDecrypted],
             ['roleName', '=', $role['roleName']]
         ])->first();

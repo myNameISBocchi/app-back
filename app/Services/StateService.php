@@ -38,7 +38,7 @@ class StateService{
 
     public function update(string $id, array $state){
         $idDecryptd = Crypt::decrypt($id);
-        $find = State::where([
+        $find = State::select('id')->where([
             ['id', '!=', $idDecryptd],
             ['stateName', '=', $state['stateName']]
         ])->first();
