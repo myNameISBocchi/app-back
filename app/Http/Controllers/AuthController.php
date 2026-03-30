@@ -8,7 +8,7 @@ use App\Services\AuthService;
 
 class AuthController extends Controller
 {
-    public function __construct(protected AuthService $authService )
+    public function __construct(protected AuthService $authService)
     {
     }
     public function loggin(Request $req){

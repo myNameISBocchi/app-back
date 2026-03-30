@@ -15,8 +15,8 @@ class PrivilegeSeeder extends Seeder
     {
         $arrPrivilege = [
             [
-                'privilegeName' => 'USERS / LIDER DE COMUNA / VOCEROS',
-                'route' => 'users',
+                'privilegeName' => 'PERSONAS / LIDER DE COMUNA / VOCEROS',
+                'route' => 'peoples',
                 'status' => 1
             ],
 

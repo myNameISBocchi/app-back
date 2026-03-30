@@ -19,7 +19,7 @@ class RolePrivilegeSeeder extends Seeder
             [
                 'roleName' => 'ADMINISTRADOR',
                 'privileges' => [
-                    'users',
+                    'peoples',
                     'comunities',
                     'councils',
                     'committees',
@@ -37,7 +37,7 @@ class RolePrivilegeSeeder extends Seeder
                     'comunities',
                     'councils',
                     'committees',
-                    'users'
+                    'peoples'
                 ]
 
             ],
