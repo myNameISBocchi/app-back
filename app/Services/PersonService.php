@@ -15,10 +15,10 @@ class PersonService{
         $idCouncil = $person['councilId'];
         $idCommitte = $person['committeeId'];
          
-        $duplicate = Person::select('id')->where([
-            ['identification',$person['identification']],
-            ['email',$person['email']],
-            ['phone',$person['phone']]])->first();
+        $duplicate = Person::where('identification', $person['identification'])
+    ->orWhere('email', $person['email'])
+    ->orWhere('phone', $person['phone'])
+    ->first();
         if($duplicate){
             return false;
         }else{
@@ -157,20 +157,23 @@ class PersonService{
         )->where('personId', $idDecrypted)->pluck('roleName')->toArray();
         return $findPerson;
     }
-    public function update(string $id, array $person){
-        $idDecrypted = Crypt::decrypt($id);
-        $duplicate = Person::select('id')->where([
-            ['id', '!=',$idDecrypted],
-            ['identification', $person['identification']],
-            ['phone', $person['phone']],
-            ])->first();
-            if(!$duplicate){
-                $person['cityId'] = Crypt::decrypt($person['cityId']);
-                return Person::where('id', $idDecrypted)->update($person);
-            }else{
-                return false;
-            }
+    public function update(string $id, array $person) {
+    $idDecrypted = Crypt::decrypt($id);
+    $duplicate = Person::where('id', '!=', $idDecrypted)
+        ->where(function($query) use ($person) {
+            $query->where('identification', $person['identification'])
+                  ->orWhere('email', $person['email'])
+                  ->orWhere('phone', $person['phone']);
+        })
+        ->exists();
+    if (!$duplicate) {
+        $person['cityId'] = Crypt::decrypt($person['cityId']);
+        
+        return Person::where('id', $idDecrypted)->update($person);
     }
+
+    return false;
+}
     public function delete(string $id){
         $idDecrypted = Crypt::decrypt($id);
        Person::where('id', '=', $idDecrypted)->delete();

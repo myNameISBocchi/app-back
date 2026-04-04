@@ -34,7 +34,7 @@ class PrivilegeService{
     public function update(string $id, array $privileges){
         $idDecrypted = Crypt::decrypt($id);
         $duplicate = Privilege::select('id')->where([
-            ['id',$idDecrypted],
+            ['id','!=',$idDecrypted],
             ['privilegeName',$privileges['privilegeName']]
         ])->first();
         if($duplicate){
