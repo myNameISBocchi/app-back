@@ -6,6 +6,9 @@ use App\Helpers\Message;
 use App\Services\PersonService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+
+
 
 class personController extends Controller
 {
@@ -116,5 +119,29 @@ class personController extends Controller
             dd($e);
             return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
         }
+    }
+
+    public function uploadPhoto( request $req, string $id){
+        try{
+            $req->validate([
+                'photoPerson' => 'required|image|mimes:png,jpg,jpeg|max:2048',
+            ]); 
+
+            $idDecrypted = Crypt::decrypt($id);
+            $file = ($req->hasFile('photoPerson'));
+
+            $upload = $this->personService->uploadPhoto($idDecrypted, $file);
+            if($upload){
+                    $res = [
+                        'error' => 0,
+                        'msg' => 'imagen guardada'
+                    ];
+                    return response()->json($res,200);
+                }
+        }catch(\Exception $e){
+            return response()->json(['error' => 500, 'msg' => Message::stored()]);
+
+        }
+
     }
 }

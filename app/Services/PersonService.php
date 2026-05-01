@@ -7,6 +7,7 @@ use App\Models\PersonCouncil;
 use App\Models\PersonRole;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PersonService{
     public function store(array $person){
@@ -193,6 +194,25 @@ class PersonService{
         $idDecrypted = Crypt::decrypt($id);
        Person::where('id', '=', $idDecrypted)->delete();
         return true;
+    }
+
+    public function uploadPhoto($id, $file){
+        $photoPerson = Person::find($id);
+        if(!empty($photoPerson->photoPerson)){
+            $oldPath = str_replace('storage/', '', $photoPerson->photoPerson);
+            if(Storage::disk('public')->exists($oldPath)){
+                Storage::disk('public')->delete($oldPath);
+            }
+            $extension = $file->getClientOriginalExtension();
+            $fileName = 'person_'. $id. '_'. time(). '.'. $extension;
+
+            $path = $file->storeAs('persons', $fileName, 'public');
+            $photoPerson->photoPerson = 'storage/'.$path;
+            $photoPerson->save(); 
+            return $photoPerson;
+
+        }
+
     }
 }
 
