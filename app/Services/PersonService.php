@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class PersonService{
     public function store(array $person){
-        $arrRoles = json_decode($person['roleId']);
+        $arrRoles = json_decode($person['roleId'] ?? '[]');
         $idComunity = $person['comunityId'];
         $idCouncil = $person['councilId'];
         $idCommitte = $person['committeeId'];
@@ -25,12 +25,26 @@ class PersonService{
             $countryDecrypted = Crypt::decrypt($person['cityId']);
             $person['cityId'] = $countryDecrypted;
             $newPerson = Person::create($person);
+
+            
             
             PersonRole::where('personId', $newPerson->id)->delete();
             $rolesInsert = [];
+            $voceroRol = DB::table('roles')->where('roleName', 'VOCERO')->first();
+            if($voceroRol){
+                $rolesInsert[] = [
+                'personId' => $newPerson->id,
+            'roleId' => $voceroRol->id,
+            'created_at' => now(),
+            'updated_at' => now()
+
+                ];
+
+            }
 
             for($i = 0; $i < count($arrRoles); $i++){
                 $roleIdDecrypted = Crypt::decrypt($arrRoles[$i]);
+                if ($voceroRol && $roleIdDecrypted == $voceroRol->id) continue;
                 $rolesInsert[] =[
                     'personId' => $newPerson->id,
                     'roleId' => $roleIdDecrypted,
@@ -121,6 +135,7 @@ class PersonService{
         });
         return $all;
     }
+
 
     public function findById(string $id){
         $idDecrypted = Crypt::decrypt($id);
