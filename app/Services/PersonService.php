@@ -196,22 +196,22 @@ class PersonService{
         return true;
     }
 
-    public function uploadPhoto($id, $file){
-        $photoPerson = Person::find($id);
-        if(!empty($photoPerson->photoPerson)){
-            $oldPath = str_replace('storage/', '', $photoPerson->photoPerson);
+    public function uploadPhoto(int $id, $file){
+        $person = Person::find($id);
+        if(!empty($person->photoPerson)){
+            $oldPath = str_replace('storage/', '', $person->photoPerson);
             if(Storage::disk('public')->exists($oldPath)){
                 Storage::disk('public')->delete($oldPath);
-            }
-            $extension = $file->getClientOriginalExtension();
+            }   
+        }
+        $extension = $file->getClientOriginalExtension();
             $fileName = 'person_'. $id. '_'. time(). '.'. $extension;
 
             $path = $file->storeAs('persons', $fileName, 'public');
-            $photoPerson->photoPerson = 'storage/'.$path;
-            $photoPerson->save(); 
-            return $photoPerson;
+            $person->photoPerson = 'storage/'.$path;
+            $person->save(); 
+            return $person;
 
-        }
 
     }
 }

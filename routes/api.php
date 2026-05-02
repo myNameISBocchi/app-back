@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/peoples', [personController::class, 'store']);
     Route::get('/peoples/{id}', [personController::class, 'findById']);
     Route::put('/peoples/{id}', [personController::class, 'update']);
+    Route::post('/peoples/{id}/photo', [personController::class, 'uploadPhoto']);
 
    
     Route::get('/countries', [countryController::class, 'findAll']);
