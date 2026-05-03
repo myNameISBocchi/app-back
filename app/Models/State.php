@@ -8,6 +8,8 @@ class State extends Model
 {
     protected $fillable = [
         'countryId',
+        'initials',
         'stateName'
+        
     ];
 }

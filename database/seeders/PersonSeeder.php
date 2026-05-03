@@ -31,7 +31,7 @@ class PersonSeeder extends Seeder
                 'status' => 1,
                 'date' => '05-10-05',
                 'password' => 'jesus',
-                'cityId' => 1,
+                'cityId' => 311,
                 'roles' => [
                     'ADMINISTRADOR'
                 ],

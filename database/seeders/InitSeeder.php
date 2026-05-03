@@ -16,14 +16,13 @@ class InitSeeder extends Seeder
             [
             PrivilegeSeeder::class,
             RoleSeeder::class,
-            CountrySeeder::class,
-            StateSeeder::class,
-            CitySeeder::class,
+            LocationSeeder::class,
             ComunitieSeeder::class,
             RolePrivilegeSeeder::class,
             CouncilSeeder::class,
             CommitteSeeder::class,
-            PersonSeeder::class
+            PersonSeeder::class,
+            
             ]
         );
     }

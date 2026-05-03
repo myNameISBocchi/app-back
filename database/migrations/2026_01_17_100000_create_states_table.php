@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('states', function (Blueprint $table) {
             $table->id();
             $table->string('stateName');
+            $table->string('initials', 10);
             $table->foreignId('countryId')->constrained(
                 table: 'countries', indexName: 'states_country_id'
             );
