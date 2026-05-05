@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comunity;
 use App\Services\ComunityService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt; // Asegúrate de tener esta importación
+use Illuminate\Support\Facades\Crypt; 
 
 class ComunityController extends Controller
 {
@@ -32,7 +32,7 @@ class ComunityController extends Controller
         }
         return response()->json($res,200);
         }catch(\Exception $error){
-            dd($error);
+            
             return response()->json(['error' => 1, 'msg' => 'servidor caido']);
 
         }
@@ -85,7 +85,7 @@ class ComunityController extends Controller
             }
             
         }catch(\Exception $e){
-            dd($e);
+            
             return response()->json(['error' => 500, 'msg' => 'fallo del servidor']);
 
         }

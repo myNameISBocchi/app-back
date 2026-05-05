@@ -27,7 +27,7 @@ class roleController extends Controller
                 return response()->json($res,500);
             }
         }catch(\Exception $e){
-            dd($e);
+           
             return response()->json(['error' => 500, 'msg' => 'error del servidor']);
         }
     }
@@ -40,7 +40,7 @@ class roleController extends Controller
         ];
         return response()->json($res,200);
         }catch(\Exception $e){
-            dd($e);
+           
             return response()->json(['error' => 500, 'msg' => 'erro del servidor']);
         }
     }
@@ -63,7 +63,7 @@ class roleController extends Controller
                 return response()->json($res, 500);
             }
         }catch(\Exception $e){
-            dd($e);
+           
             return response()->json(['error' => 500, 'msg' => 'error del servidor']);
         }
 

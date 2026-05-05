@@ -139,56 +139,33 @@ class PersonService{
 
 
     public function findById(string $id){
-        $idDecrypted = Crypt::decrypt($id);
-        $findPerson = Person::select(
-            //'peoples.id as personId',
-            'firstName',
-            'lastName',
-            'identification',
-            'phone',
-            'status',
-            'date',
-            'email',
-            'cityName as city',
-            //'peoples.cityId as cityId',
-            'countries.countryName as country',
-            'states.stateName as state',
-            'photoPerson',
-            'comunities.comunityName',
-            'councils.councilName',
-            'committees.committeeName',
-            //'roles.roleName'
-        )->join('cities', 'peoples.cityId', '=', 'cities.id'
-        )->join('states', 'cities.stateId', '=', 'states.id'
-        )->join('countries','states.countryId','=','countries.id'
-        )->join('peoples_comunities', 'peoples.id', '=', 'peoples_comunities.personId'
-        )->join('comunities', 'peoples_comunities.comunityId', '=', 'comunities.id'
-        )->join('peoples_councils', 'peoples.id', '=', 'peoples_councils.personId'
-        )->join('councils', 'peoples_councils.councilId', '=', 'councils.id'
-        )->join('peoples_committees', 'peoples.id', '=', 'peoples_committees.personId'
-        )->join('committees', 'peoples_committees.committeeId', '=', 'committees.id'
-        )->where('peoples.id', '=', $idDecrypted)->first();
-        if(!$findPerson) return false;
-        $findPerson->roles = DB::table('peoples_roles')->join('roles', 'peoples_roles.roleId', 'roles.id'
-        )->where('personId', $idDecrypted)->pluck('roleName')->toArray();
-        return $findPerson;
-    }
-    public function update(string $id, array $person) {
     $idDecrypted = Crypt::decrypt($id);
-    $duplicate = Person::where('id', '!=', $idDecrypted)
-        ->where(function($query) use ($person) {
-            $query->where('identification', $person['identification'])
-                  ->orWhere('email', $person['email'])
-                  ->orWhere('phone', $person['phone']);
-        })
-        ->exists();
-    if (!$duplicate) {
-        $person['cityId'] = Crypt::decrypt($person['cityId']);
-        
-        return Person::where('id', $idDecrypted)->update($person);
-    }
+    $findPerson = Person::select(
+        'firstName', 'lastName', 'identification', 'phone', 
+        'status', 'date', 'email', 'cityName as city',
+        'countries.countryName as country', 'states.stateName as state',
+        'photoPerson', 'comunities.comunityName', 
+        'councils.councilName', 'committees.committeeName'
+    )
+    ->join('cities', 'peoples.cityId', '=', 'cities.id')
+    ->join('states', 'cities.stateId', '=', 'states.id')
+    ->join('countries', 'states.countryId', '=', 'countries.id')
+    ->leftJoin('peoples_comunities', 'peoples.id', '=', 'peoples_comunities.personId')
+    ->leftJoin('comunities', 'peoples_comunities.comunityId', '=', 'comunities.id')
+    ->leftJoin('peoples_councils', 'peoples.id', '=', 'peoples_councils.personId')
+    ->leftJoin('councils', 'peoples_councils.councilId', '=', 'councils.id')
+    ->leftJoin('peoples_committees', 'peoples.id', '=', 'peoples_committees.personId')
+    ->leftJoin('committees', 'peoples_committees.committeeId', '=', 'committees.id')
+    ->where('peoples.id', '=', $idDecrypted)->first();
 
-    return false;
+    if(!$findPerson) return false;
+
+    $findPerson->roles = DB::table('peoples_roles')
+        ->join('roles', 'peoples_roles.roleId', 'roles.id')
+        ->where('personId', $idDecrypted)
+        ->pluck('roleName')->toArray();
+
+    return $findPerson;
 }
     public function delete(string $id){
         $idDecrypted = Crypt::decrypt($id);
@@ -214,6 +191,108 @@ class PersonService{
 
 
     }
+
+    public function searchPerson(array $filters = [])
+{
+    $query = Person::query()
+        ->select(
+            'peoples.id as personId',
+            'peoples.firstName',
+            'peoples.lastName',
+            'peoples.identification',
+            'peoples.phone',
+            'peoples.status',
+            'peoples.date',
+            'peoples.email',
+            'peoples.cityId as cityId',
+            'peoples.photoPerson',
+            'cities.cityName as city',
+            'states.stateName as state',
+            'countries.countryName as country',
+            'comunities.comunityName',
+            'councils.councilName',
+            'committees.committeeName'
+        )
+        
+        ->join('cities', 'peoples.cityId', '=', 'cities.id')
+        ->join('states', 'cities.stateId', '=', 'states.id')
+        ->join('countries', 'states.countryId', '=', 'countries.id')
+        ->leftJoin('peoples_comunities', 'peoples.id', '=', 'peoples_comunities.personId')
+        ->leftJoin('comunities', 'peoples_comunities.comunityId', '=', 'comunities.id')
+        ->leftJoin('peoples_councils', 'peoples.id', '=', 'peoples_councils.personId')
+        ->leftJoin('councils', 'peoples_councils.councilId', '=', 'councils.id')
+        ->leftJoin('peoples_committees', 'peoples.id', '=', 'peoples_committees.personId')
+        ->leftJoin('committees', 'peoples_committees.committeeId', '=', 'committees.id');
+
+    if (!empty($filters['firstName'])) {
+        $term = $filters['firstName'];
+        
+        $query->where(function($q) use ($term) {
+            $q->where('peoples.firstName', 'LIKE', '%' . $term . '%')
+              ->orWhere('peoples.lastName', 'LIKE', '%' . $term . '%')
+              ->orWhere('peoples.identification', 'LIKE', '%' . $term . '%')
+              ->orWhere('comunities.comunityName', 'LIKE', '%' . $term . '%')
+              ->orWhere('councils.councilName', 'LIKE', '%' . $term . '%')
+              ->orWhere('committees.committeeName', 'LIKE', '%' . $term . '%');
+        });
+    }
+
+    if (!empty($filters['comunityId'])) {
+        $query->where('comunities.id', Crypt::decrypt($filters['comunityId']));
+    }
+    if (!empty($filters['councilId'])) {
+        $query->where('councils.id', Crypt::decrypt($filters['councilId']));
+    }
+    if (!empty($filters['committeeId'])) {
+        $query->where('committees.id', Crypt::decrypt($filters['committeeId']));
+    }
+
+    return $query->get()->map(function($object) {
+        $roles = DB::table('peoples_roles')
+            ->join('roles', 'peoples_roles.roleId', '=', 'roles.id')
+            ->where('personId', '=', $object->personId)
+            ->pluck('roleName')->toArray();
+        
+        $object->roleName = implode(', ', $roles);
+        $object->blocked = DB::table('peoples_roles')->where('personId', $object->personId)->exists();
+        
+        
+        $object->locality = [
+            'city' => $object->city,
+            'state' => $object->state,
+            'country' => $object->country
+        ];
+
+      
+        $personIdEncrypt = Crypt::encrypt($object->personId);
+        $cityIdEncrypt = Crypt::encrypt($object->cityId);
+
+       
+        unset($object->city, $object->state, $object->country, $object->cityId);
+
+        $object->personId = $personIdEncrypt;
+        $object->cityId = $cityIdEncrypt;
+
+        return $object;
+    });
+}
+public function update(string $id, array $person) {
+    $idDecrypted = Crypt::decrypt($id);
+    $duplicate = Person::where('id', '!=', $idDecrypted)
+        ->where(function($query) use ($person) {
+            $query->where('identification', $person['identification'])
+                  ->orWhere('email', $person['email'])
+                  ->orWhere('phone', $person['phone']);
+        })
+        ->exists();
+    if (!$duplicate) {
+        $person['cityId'] = Crypt::decrypt($person['cityId']);
+        
+        return Person::where('id', $idDecrypted)->update($person);
+    }
+
+    return false;
+}
 }
 
 

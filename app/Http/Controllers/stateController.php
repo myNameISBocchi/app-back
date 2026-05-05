@@ -44,8 +44,7 @@ class stateController extends Controller
         ];
         return response()->json($res,200);
         } catch (\Exception $th) {
-            //throw $th;
-            dd($th);
+           
             return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
         }
     }
@@ -84,7 +83,7 @@ class stateController extends Controller
             return response()->json($res,200);
                 } 
         } catch (\Exception $th) {
-            dd($th);
+           
             return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
             //throw $th;
         }

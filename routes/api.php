@@ -72,7 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/privileges', [privilegesController::class, 'findAll']);
     Route::get('rolesPrivileges/{roleId}', [rolePrivilegeController::class, 'findPrivilegeByRoleId']);
     
-    
+    Route::get('/peoples/search', [personController::class, 'searchPerson']);
     Route::post('/peoples', [personController::class, 'store']);
     Route::get('/peoples/{id}', [personController::class, 'findById']);
     Route::put('/peoples/{id}', [personController::class, 'update']);

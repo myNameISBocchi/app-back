@@ -27,7 +27,7 @@ class citieController extends Controller
                 return response()->json($res,500);
             }
         } catch (\Exception $th) {
-            dd($th);
+       
             //throw $th;
             return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
         }
@@ -68,7 +68,7 @@ class citieController extends Controller
             }
 
         }catch(\Exception $e){
-            dd($e);
+          
             return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
         }
 

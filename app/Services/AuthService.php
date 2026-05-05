@@ -39,6 +39,7 @@ class AuthService{
                 'iat' => $time,
                 'expired' => $expiredToken,
                 'token' => $token,
+                'personId' => $findPerson->id,
                 'msg' => $msg,
                 'error' => $error,
                 'user' => [

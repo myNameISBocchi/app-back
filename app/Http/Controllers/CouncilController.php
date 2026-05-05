@@ -27,7 +27,7 @@ class CouncilController extends Controller
             }
             return response()->json($res,200);
         }catch(\Exception $e){
-            dd($e);
+           
             return response()->json(['error' => 1, 'msg' => 'error del servidor']);
         }
 
@@ -48,7 +48,7 @@ class CouncilController extends Controller
             return response()->json($res, 200);
 
         }catch(\Exception $e){
-            dd($e);
+           
             return response()->json(['error' => 500, 'msg' => 'error del servidor' ]);
 
         }
@@ -74,7 +74,7 @@ class CouncilController extends Controller
         
 
         }catch(Exception $e){
-            dd($e);
+        
             return response()->json(['error' => 500, 'msg' => 'Error del servidor']);
 
         }

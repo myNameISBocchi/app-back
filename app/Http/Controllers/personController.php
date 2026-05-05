@@ -31,7 +31,7 @@ class personController extends Controller
                 return response()->json($res,500);
             }
         }catch(\Exception $e){
-            dd($e);
+           
             return response()->json(['error' => 500, Message::errorServer()]);
         }
     }
@@ -49,7 +49,7 @@ class personController extends Controller
             }
 
         }catch(\Exception $e){
-            dd($e);
+           
             return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
 
         }
@@ -95,10 +95,11 @@ class personController extends Controller
                 return response()->json($res,500);
             }
         }catch(\Exception $e){
-            dd($e);
+           
                 return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
         }
     }
+        
     public function delete(string $id){
         try{
             $delete = $this->personService->delete($id);
@@ -116,7 +117,7 @@ class personController extends Controller
                 return response()->json($res,500);
             }
         }catch(\Exception $e){
-            dd($e);
+           
             return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
         }
     }
@@ -139,9 +140,51 @@ class personController extends Controller
                     return response()->json($res,200);
                 }
         }catch(\Exception $e){
-            dd($e);
+            
             return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
 
         }
+    }
+
+    public function searchPerson(Request $req){
+        try{
+
+        $filters = $req->only(
+           [
+                'comunityId', 
+                'councilId', 
+                'committeeId', 
+                'identification', 
+                'firstName', 
+                'lastName'
+           ]
+        );
+
+        $search = $this->personService->searchPerson($filters);
+        if($search){
+            $res = [
+                'error' => 0,
+                'msg' => 'resultados encontrados',
+                'results' => $search
+            ];
+            return response()->json($res,200);
+        }else{
+            $res = [
+                'error' => 1,
+                'msg' => 'No se encontraron los registros',
+                'results' => []
+            ];
+            return response()->json($res,200);
+        }
+
+        }catch(\Exception $e){
+            
+            return response()->json([
+                'error' => 500, 
+                'msg' => Message::errorServer(),
+            ], 500);
+
+        }
+
     }
 }
