@@ -2,6 +2,7 @@
 namespace App\Services;
 use App\Models\Person;
 use Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 class AuthService{
     public function loggin(array $auth){
@@ -39,7 +40,7 @@ class AuthService{
                 'iat' => $time,
                 'expired' => $expiredToken,
                 'token' => $token,
-                'personId' => $findPerson->id,
+                'personId' => Crypt::encrypt($findPerson->id),
                 'msg' => $msg,
                 'error' => $error,
                 'user' => [
