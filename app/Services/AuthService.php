@@ -4,6 +4,7 @@ use App\Models\Person;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 class AuthService{
     public function loggin(array $auth){
         $msg = 'Welcome';
@@ -12,13 +13,12 @@ class AuthService{
         $time = time();
         $timeSession = 60*60;
         $expiredToken = $timeSession + 60;
-        $findPerson = Person::select('id','firstName', 'lastName')->where([
+        $findPerson = Person::select('id','firstName', 'lastName', 'password')->where([
             ['email',$auth['email']],
-            ['password',$auth['password']]
         ])->first();
 
         $payload = [];
-        if($findPerson){
+        if($findPerson && Hash::check($auth['password'], $findPerson->password)){
             $roles = DB::table('peoples_roles')->join(
                 'roles', 'peoples_roles.roleId', '=', 'roles.id'
             )->where('personId', '=', $findPerson->id
