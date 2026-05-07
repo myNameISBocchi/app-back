@@ -1,59 +1,78 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+🚀 GUÍA DE INSTALACIÓN DEL PROYECTO
+Sigue estos pasos detallados para configurar el entorno y poner en marcha la aplicación.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+1. REQUISITOS PREVIOS (PROGRAMAS Y PAQUETES)
+Debes instalar los siguientes componentes en el orden indicado:
 
-## About Laravel
+🐘 PHP & Servidor Local
+PHP 8.2 / XAMPP: Descargar XAMPP 8.2.12
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Tutorial de instalación: Ver: https://www.youtube.com/watch?v=pwTbAKRiRvA
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+📦 Gestor de Dependencias PHP
+COMPOSER: Descargar Composer (Click en Composer-Setup.exe)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Tutorial de instalación: https://www.youtube.com/watch?v=70FW3WDqKEc
 
-## Learning Laravel
+🌿 Control de Versiones
+GIT: Descargar Git para Windows (Elegir 64-bit Git for Windows Setup)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Tutorial de instalación: https://www.youtube.com/watch?v=jdXKwLNUfmg&t=1s
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+🛠️ Laravel Framework 12.44.0
+Una vez instalado Git, abre la terminal y ejecuta:
 
-## Laravel Sponsors
+Bash:
+composer global require laravel/installer
+Tutorial de instalación: https://www.youtube.com/watch?v=NdcB3bNRV50
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+🟢 Entorno de Ejecución JS
+NODEJS: Descargar Node.js (Elegir Windows Installer .msi)
 
-### Premium Partners
+Tutorial de instalación: https://www.youtube.com/watch?v=UtD6HgIEs2I
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+🅰️ Angular CLI
+Para instalar la versión específica requerida, abre la consola de Git y ejecuta:
 
-## Contributing
+Bash:
+npm install -g @angular/cli@21.0.4
+Tutorial de instalación: https://www.youtube.com/watch?v=V8gKV16MvOM
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. PASOS PARA INSTALAR EL PROYECTO
+Una vez tengas todas las herramientas instaladas, sigue estos pasos para clonar y ejecutar el sistema:
 
-## Code of Conduct
+🖥️ Paso 1: acceder al servidor de apache y Configurar el Backend (Laravel)
+Abre tu terminal en la carpeta donde guardas tus proyectos.
+escribe lo siguiente en la consola.
+cd c: 
+luego
+cd xampp/htdocs/app-back
+y luego Clona el repositorio:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Bash:
+git clone https://github.com/myNameISBocchi/app-back.git
+Entra a la carpeta: cd app-back
 
-## Security Vulnerabilities
+Instala las librerías: composer install
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Crea tu archivo de configuración: cp .env.example .env
 
-## License
+Genera la clave de seguridad: php artisan key:generate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+y ingresa tambien el: php aritsan storage:link
+
+Activa Apache y MySQL en XAMPP, crea la base de datos y ejecuta: php artisan migrate:fresh --seed
+
+
+🎨 Paso 2: Configurar el Frontend (Angular)
+Abre una nueva terminal.
+
+Clona el repositorio:
+
+Bash:
+git clone https://github.com/myNameISBocchi/FlorMontielFront.git
+Entra a la carpeta: cd FlorMontielFront
+
+Instala los paquetes de Node colocando en la consola: npm install
+
+Inicia la aplicación: ng serve
