@@ -31,7 +31,7 @@ class PersonSeeder extends Seeder
                 'identification' => '31478490',
                 'status' => 1,
                 'date' => '05-10-05',
-                'password' => Hash::make('v31478490'),
+                'password' => 'v31478490',
                 'cityId' => 311,
                 'roles' => [
                     'ADMINISTRADOR'
@@ -48,7 +48,7 @@ class PersonSeeder extends Seeder
                 'identification' => '31671119',
                 'status' => 1,
                 'date' => '05-10-05',
-                'password' => Hash::make('v31671119'),
+                'password' => 'v31671119',
                 'cityId' => 311,
                 'roles' => [
                     'ADMINISTRADOR'
@@ -65,7 +65,7 @@ class PersonSeeder extends Seeder
                 'identification' => '31225769',
                 'status' => 1,
                 'date' => '05-10-05',
-                'password' => Hash::make('v31225769'),
+                'password' => 'v31225769',
                 'cityId' => 311,
                 'roles' => [
                     'ADMINISTRADOR'
