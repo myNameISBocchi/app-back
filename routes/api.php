@@ -23,7 +23,9 @@ Route::middleware('auth')->group(function () {
    
     Route::get('/comunities', [ComunityController::class, 'findAll']);
     Route::get('/councils', [CouncilController::class, 'findAll']);
+    Route::get('/councils/bycomunity/{comunityId}', [CouncilController::class, 'findByComunity']);
     Route::get('/committees', [CommitteeController::class, 'findAll']); 
+    Route::get('committees/subcommittees/{parentId}', [committeeController::class, 'findSubcommittees']);
     Route::get('/roles', [roleController::class, 'findAll']);
     Route::get('/privileges', [privilegesController::class, 'findAll']);
     Route::get('/cities', [citieController::class, 'findAll']);

@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('committees', function (Blueprint $table) {
             $table->id();
             $table->string('committeeName');
+            $table->unsignedBigInteger('parentId')->nullable();
             $table->timestamps();
+
+            $table->foreign('parentId')->references('id')->on('committees')->onDelete('cascade');
         });
     }
 

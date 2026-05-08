@@ -53,4 +53,20 @@ class committeeController extends Controller
 
         }
     }
+
+    public function findSubCommittee($parentId){
+        try{
+            $id = \Illuminate\Support\Facades\Crypt::decrypt($parentId);
+        $sub = \App\Models\Committee::where('parent_id', $id)->get();
+
+        return response()->json([
+            'error' => 0,
+            'results' => $sub
+
+        ],200);
+
+        }catch(\Exception $e){
+           return response()->json(['error' => 1, 'msg' => 'Error al buscar subcomités'], 500);
+        }
+    }
 }

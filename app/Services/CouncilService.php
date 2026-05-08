@@ -16,19 +16,19 @@ class CouncilService{
             }
     }
     public function findAll(){
-        $councilAll = Council::select('councils.id',
+        $councilAll = Council::select('councils.id as councilId',
         'councilName',
         'comunityName',
         'comunityId', 
         'councils.googleMaps',
         'comunities.id as comunityId'
         )->join('comunities', 'councils.comunityId', '=', 'comunities.id')->get()->map(function($councilTemp){
-            $idEncrypt = Crypt::encrypt($councilTemp->id);
+            $idEncrypt = Crypt::encrypt($councilTemp->councilId);
             $comunityIdCrypt = Crypt::encrypt($councilTemp->comunityId);
             unset($councilTemp->comunityId);
             $councilTemp->comunityId = $comunityIdCrypt;
             $councilTemp->councilId = $idEncrypt;
-            unset($councilTemp->id);
+            unset($councilTemp->councilId);
             return $councilTemp;
         });
         return $councilAll;
@@ -50,6 +50,20 @@ class CouncilService{
     public function delete(string $id){
         $idDecrypted = Crypt::decrypt($id);
         return Council::where('id', '=', $idDecrypted)->delete($idDecrypted);
+    }
+
+    public function findByComunity(string $comunityId){
+        $idDecrypted = Crypt::decrypt($comunityId);
+
+        return Council::select('id', 'councilName'
+        )->where('comunityId', $idDecrypted)->get()->map(function($councilTemp){
+            return [
+                'councilId' => Crypt::encrypt($councilTemp->id),
+                'councilName' => $councilTemp->councilName
+            ];
+
+        });
+
     }
 
 }

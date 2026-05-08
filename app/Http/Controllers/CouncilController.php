@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Message;
 use Illuminate\Http\Request;
 use App\Services\CouncilService;
 use Exception;
@@ -95,6 +96,18 @@ class CouncilController extends Controller
 
         }catch(Exception $e){
             return response()->json(['error' => 500, 'msg' => 'error del servidor']);
+
+        }
+
+    }
+
+    public function findByComunity($comunityId){
+        try{
+            $councils = $this->councilService->findByComunity($comunityId);
+            return response()->json($councils);
+
+        }catch(\Exception $e){
+            return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
 
         }
 

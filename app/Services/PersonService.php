@@ -81,61 +81,76 @@ class PersonService{
         }
     }
     public function findAll(){
-        $all = Person::select(
-            'peoples.id as personId',
-            'firstName',
-            'lastName',
-            'identification',
-            'phone',
-            'status',
-            'date',
-            'email',
-            'cityName as city',
-            'peoples.cityId as cityId',
-            'countries.countryName as country',
-            'states.stateName as state',
-            'photoPerson',
-            'comunities.comunityName',
-            'councils.councilName',
-            'committees.committeeName',
-        )->join('cities', 'peoples.cityId', '=', 'cities.id'
-        )->join('states', 'cities.stateId', '=', 'states.id'
-        )->join('countries','states.countryId','=','countries.id'
-        )->join('peoples_comunities', 'peoples.id', '=', 'peoples_comunities.personId'
-        )->join('comunities', 'peoples_comunities.comunityId', '=', 'comunities.id'
-        )->join('peoples_councils', 'peoples.id', '=', 'peoples_councils.personId'
-        )->join('councils', 'peoples_councils.councilId', '=', 'councils.id'
-        )->join('peoples_committees', 'peoples.id', '=', 'peoples_committees.personId'
-        )->join('committees', 'peoples_committees.committeeId', '=', 'committees.id'
-        )->get()->map(function($item){
-            $roles = DB::table('peoples_roles'
-            )->join('roles', 'peoples_roles.roleId', '=', 'roles.id')->where('personId', '=', $item->personId
-            )->pluck('roleName')->toArray();
-            $item->roleName = implode(', ', $roles);
-             $blockedResult = PersonRole::select('id')->where('personId', '=', $item->personId)->first();
-            if($blockedResult){
-                $item->blocked = 1;
-            }else{
-                $item->blocked = 0;
-            }
-            $item->locality = [
-                'city' => $item->city,
-                'country' => $item->country,
-                'state' => $item->state
-            ];
-            $personIdEncrypt = Crypt::encrypt($item->personId);
-            $cityIdEncrypt = Crypt::encrypt($item->cityId);
-            unset($item->city);
-            unset($item->country);
-            unset($item->state);
-            unset($item->personId);
-            unset($item->cityId);
-            $item->personId = $personIdEncrypt;
-            $item->cityId = $cityIdEncrypt;
-            return $item;
-        });
-        return $all;
-    }
+    $all = Person::select(
+        'peoples.id as personId',
+        'firstName',
+        'lastName',
+        'identification',
+        'phone',
+        'status',
+        'date',
+        'email',
+        'cityName as city',
+        'peoples.cityId as cityId',
+        'countries.countryName as country',
+        'states.stateName as state',
+        'photoPerson',
+        'comunities.comunityName',
+        'councils.councilName',
+        'committees.committeeName',
+        'parent_committees.committeeName as parentName'
+    )->join('cities', 'peoples.cityId', '=', 'cities.id'
+    )->join('states', 'cities.stateId', '=', 'states.id'
+    )->join('countries','states.countryId','=','countries.id'
+    )->join('peoples_comunities', 'peoples.id', '=', 'peoples_comunities.personId'
+    )->join('comunities', 'peoples_comunities.comunityId', '=', 'comunities.id'
+    )->join('peoples_councils', 'peoples.id', '=', 'peoples_councils.personId'
+    )->join('councils', 'peoples_councils.councilId', '=', 'councils.id'
+    )->join('peoples_committees', 'peoples.id', '=', 'peoples_committees.personId'
+    )->join('committees', 'peoples_committees.committeeId', '=', 'committees.id'
+    )->leftJoin('committees as parent_committees', 'committees.parentId', '=', 'parent_committees.id'
+    )->get()->map(function($item){
+        $roles = DB::table('peoples_roles'
+        )->join('roles', 'peoples_roles.roleId', '=', 'roles.id')->where('personId', '=', $item->personId
+        )->pluck('roleName')->toArray();
+        
+        $item->roleName = implode(', ', $roles);
+
+        if (!empty($item->parentName)) {
+            $item->committeeName = $item->parentName . ' - ' . $item->committeeName;
+        }
+
+        $blockedResult = PersonRole::select('id')->where('personId', '=', $item->personId)->first();
+        if($blockedResult){
+            $item->blocked = 1;
+        }else{
+            $item->blocked = 0;
+        }
+
+        $item->locality = [
+            'city' => $item->city,
+            'country' => $item->country,
+            'state' => $item->state
+        ];
+
+        $personIdEncrypt = Crypt::encrypt($item->personId);
+        $cityIdEncrypt = Crypt::encrypt($item->cityId);
+
+        unset($item->city);
+        unset($item->country);
+        unset($item->state);
+        unset($item->personId);
+        unset($item->cityId);
+        unset($item->parentName);
+
+        $item->personId = $personIdEncrypt;
+        $item->cityId = $cityIdEncrypt;
+
+        return $item;
+    });
+
+    return $all;
+}
 
 
     public function findById(string $id){

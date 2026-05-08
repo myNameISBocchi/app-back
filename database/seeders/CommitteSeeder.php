@@ -3,28 +3,25 @@
 namespace Database\Seeders;
 
 use App\Models\Committee;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CommitteSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $arrCommittee = [
-            [
-                'committeeName' => 'Contraloria'
-            ],
-            [
-                'committeeName' => 'ADMINISTRATIVA'
-            ],
-            [
-                'committeeName' => 'EJECUTIVA'
-            ]
+        $contraloria = Committee::create(['committeeName' => 'CONTRALORÍA']);
+        $administrativa = Committee::create(['committeeName' => 'ADMINISTRATIVA']);
+        $ejecutiva = Committee::create(['committeeName' => 'EJECUTIVA']);
 
+        $subcomitesEjecutiva = [
+            ['committeeName' => 'FUEGO', 'parentId' => $ejecutiva->id],
+            ['committeeName' => 'HIELO', 'parentId' => $ejecutiva->id],
+            ['committeeName' => 'TIERRA', 'parentId' => $ejecutiva->id],
+            ['committeeName' => 'AIRE', 'parentId' => $ejecutiva->id],
         ];
-        Committee::insert($arrCommittee);
+
+        foreach ($subcomitesEjecutiva as $sub) {
+            Committee::create($sub);
+        }
     }
 }

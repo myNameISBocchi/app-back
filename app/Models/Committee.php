@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Committee extends Model
 {
     protected $fillable = [
-        'committeeName'
+        'committeeName',
+        'parentId'
     ];
+
+    public function parent(){
+        return $this->belongsTo(Committee::class, 'parentId');
+    }
+
+    public function children(){
+        return $this->hasMany(Committee::class, 'parentId');
+    }
 }
