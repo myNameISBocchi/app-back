@@ -75,4 +75,4 @@ Entra a la carpeta: cd FlorMontielFront
 
 Instala los paquetes de Node colocando en la consola: npm install
 
-Inicia la aplicación: ng serve
+Inicia la aplicación: ng serve -o
