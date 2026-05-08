@@ -293,6 +293,30 @@ public function update(string $id, array $person) {
 
     return false;
 }
+
+public function updateRoles(string $id, array $roleId){
+    $idDecrypted = Crypt::decrypt($id);
+
+    return DB::transaction(function() use ($idDecrypted, $roleId){
+        DB::table('peoples_roles')->where('personId', $idDecrypted)->delete();
+        $rolesInsert = [];
+        foreach($roleId as $key => $rolesId){
+            $rolesInsert[] = [
+                'personId' => $idDecrypted,
+                'roleId' => Crypt::decrypt($rolesId),
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+        }
+
+        if(!empty($rolesInsert)){
+            return DB::table('peoples_roles')->insert($rolesInsert);
+        }
+        return true;
+
+    });
+
+}
 }
 
 

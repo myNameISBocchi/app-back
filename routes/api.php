@@ -36,11 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/peoples/{id}', [personController::class, 'findById']);
     Route::put('/peoples/{id}', [personController::class, 'update']);
     Route::post('/peoples/{id}/photo', [personController::class, 'uploadPhoto']);
+  
     Route::get('rolesPrivileges/{roleId}', [rolePrivilegeController::class, 'findPrivilegeByRoleId']);
 
 
     Route::middleware('auth:ADMINISTRADOR,LIDER DE COMUNA')->group(function () {
-        // Gestión de Comunidades
+
         Route::post('/comunities', [ComunityController::class, 'store']);
         Route::put('/comunities/{id}', [ComunityController::class, 'update']);
         Route::delete('/comunities/{id}', [ComunityController::class, 'delete']);
@@ -57,6 +58,7 @@ Route::middleware('auth')->group(function () {
 
     
     Route::middleware('auth:ADMINISTRADOR')->group(function () {
+          Route::post('peoples/{id}/roles', [personController::class, 'assignRoles']);
         Route::post('/roles', [roleController::class, 'store']);
         Route::put('/roles/{id}', [roleController::class, 'update']);
         Route::delete('roles/{id}', [roleController::class, 'delete']);
@@ -70,7 +72,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/peoples', [personController::class, 'findAll']);
         Route::delete('/peoples/{id}', [personController::class, 'delete']);
 
-        // Ubicaciones Geográficas
+        
         Route::post('/countries', [countryController::class, 'store']);
         Route::put('countries/{id}', [countryController::class, 'update']);
         Route::delete('/countries/{id}', [countryController::class, 'delete']);

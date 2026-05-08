@@ -187,4 +187,20 @@ class personController extends Controller
         }
 
     }
+
+    public function assignRoles(Request $req, $id){
+        try{
+            $update = $this->personService->updateRoles($id, $req->input('roles',[]));
+            if($update){
+                $res = [
+                    'error' => 0,
+                    'msg' => 'Assing'
+                ];
+                return response()->json($res, 200);
+            }
+        }catch(\Exception $e){
+            return response()->json(['error' => 500, 'msg' => Message::errorServer()]);
+        }
+
+    }
 }
