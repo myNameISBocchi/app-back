@@ -293,6 +293,7 @@ class PersonService{
 }
 public function update(string $id, array $person) {
     $idDecrypted = Crypt::decrypt($id);
+    
     $duplicate = Person::where('id', '!=', $idDecrypted)
         ->where(function($query) use ($person) {
             $query->where('identification', $person['identification'])
@@ -300,10 +301,18 @@ public function update(string $id, array $person) {
                   ->orWhere('phone', $person['phone']);
         })
         ->exists();
+
     if (!$duplicate) {
-        $person['cityId'] = Crypt::decrypt($person['cityId']);
-        
-        return Person::where('id', $idDecrypted)->update($person);
+        $model = Person::find($idDecrypted);
+
+        if ($model) {
+            $person['cityId'] = Crypt::decrypt($person['cityId']);
+            if (empty($person['password'])) {
+                unset($person['password']);
+            }
+            $model->fill($person);
+            return $model->save();
+        }
     }
 
     return false;
