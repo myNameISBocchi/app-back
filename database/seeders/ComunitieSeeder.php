@@ -16,12 +16,10 @@ class ComunitieSeeder extends Seeder
         $arrComunity = [
             ['comunityName' => 'CACHIRI',
             'googleMaps' => 'MUNICIPIO MARA MAPA',
-            'photoComunity' => 'MONTE'
             ],
             [
             'comunityName' => 'CUATRO BOCAS',
             'googleMaps' => '3 BOCAS MAPA',
-            'photoComunity' => 'MONTE'
             ],
         ];
         Comunity::insert($arrComunity);
