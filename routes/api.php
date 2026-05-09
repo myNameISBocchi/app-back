@@ -56,6 +56,8 @@ Route::middleware('auth')->group(function () {
 
       
         Route::post('/committees', [CommitteeController::class, 'store']); 
+        Route::put('/committees/{id}',[CommitteeController::class, 'update']);
+        Route::delete('/committees/{id}',[CommitteeController::class,'delete']);
     });
 
     

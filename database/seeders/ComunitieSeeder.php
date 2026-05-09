@@ -14,12 +14,8 @@ class ComunitieSeeder extends Seeder
     public function run(): void
     {
         $arrComunity = [
-            ['comunityName' => 'CACHIRI',
+            ['comunityName' => 'COMUNA SOCIALISTA FLOR MONTIEL',
             'googleMaps' => 'MUNICIPIO MARA MAPA',
-            ],
-            [
-            'comunityName' => 'CUATRO BOCAS',
-            'googleMaps' => '3 BOCAS MAPA',
             ],
         ];
         Comunity::insert($arrComunity);

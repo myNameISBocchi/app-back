@@ -15,38 +15,43 @@ class CouncilService{
                 return Council::create($council);
             }
     }
-    public function findAll(){
-        $councilAll = Council::select('councils.id as councilId',
-        'councilName',
-        'comunityName',
-        'comunityId', 
-        'councils.googleMaps',
-        'comunities.id as comunityId'
-        )->join('comunities', 'councils.comunityId', '=', 'comunities.id')->get()->map(function($councilTemp){
-            $idEncrypt = Crypt::encrypt($councilTemp->councilId);
-            $comunityIdCrypt = Crypt::encrypt($councilTemp->comunityId);
-            unset($councilTemp->comunityId);
-            $councilTemp->comunityId = $comunityIdCrypt;
-            $councilTemp->councilId = $idEncrypt;
-            unset($councilTemp->councilId);
-            return $councilTemp;
-        });
-        return $councilAll;
-    }
-    
-    public function update(string $id, array $council){
-         $idDecrypted = Crypt::decrypt($id);
-        $find = Council::select('id')->where([
-            ['id', '!=', $idDecrypted],
-            ['councilName', '=', $council['councilName']]
-            ])->first();
-        if($find){
-            return false;
-        }else{
-            return Council::where('id', '=' , $idDecrypted)->update($council);
-        }
+   public function findAll(){
+    return Council::join('comunities', 'councils.comunityId', '=', 'comunities.id')
+        ->select(
+            'councils.id as real_id',
+            'councils.councilName',
+            'comunities.comunityName',
+            'councils.googleMaps',
+            'councils.comunityId'
+        )
+        ->get()
+        ->map(function($item){
 
+            $item->councilId = Crypt::encrypt($item->real_id);
+            $item->comunityId = Crypt::encrypt($item->comunityId);
+        
+            unset($item->real_id);
+            unset($item->id); 
+            
+            return $item;
+        });
+}
+    
+   public function update(string $id, array $data){
+        $idDecrypted = Crypt::decrypt($id);
+        $toUpdate = [
+            'councilName' => $data['councilName'],
+            'googleMaps'  => $data['googleMaps'] ?? null,
+        ];
+        if (!empty($data['cityId']) && $data['cityId'] !== 'undefined') {
+            $toUpdate['cityId'] = Crypt::decrypt($data['cityId']);
+        }
+        if (!empty($data['comunityId']) && $data['comunityId'] !== 'undefined') {
+            $toUpdate['comunityId'] = Crypt::decrypt($data['comunityId']);
+        }
+        return Council::where('id', $idDecrypted)->update($toUpdate);
     }
+
     public function delete(string $id){
         $idDecrypted = Crypt::decrypt($id);
         return Council::where('id', '=', $idDecrypted)->delete($idDecrypted);

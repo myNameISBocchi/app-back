@@ -11,15 +11,10 @@ use App\Models\PersonComunity;
 use App\Models\PersonCouncil;
 use App\Models\PersonRole;
 use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class PersonSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $arrPerson = [
@@ -33,12 +28,10 @@ class PersonSeeder extends Seeder
                 'date' => '05-10-05',
                 'password' => 'v31478490',
                 'cityId' => 311,
-                'roles' => [
-                    'ADMINISTRADOR'
-                ],
-                'comunity' => 'CACHIRI',
-                'committe' => 'ADMINISTRATIVA',
-                'council' => 'SAN MAGALLAN'
+                'roles' => ['ADMINISTRADOR'],
+                'comunity' => 'COMUNA SOCIALISTA FLOR MONTIEL',
+                'committe' => 'UNIDAD ADMINISTRATIVA',
+                'council' => 'MANANTIAL DE CUJI'
             ],
             [
                 'firstName' => 'Abubeiker',
@@ -50,12 +43,10 @@ class PersonSeeder extends Seeder
                 'date' => '05-10-05',
                 'password' => 'v31671119',
                 'cityId' => 311,
-                'roles' => [
-                    'ADMINISTRADOR'
-                ],
-                'comunity' => 'CACHIRI',
-                'committe' => 'ADMINISTRATIVA',
-                'council' => 'SAN MAGALLAN'
+                'roles' => ['ADMINISTRADOR'],
+                'comunity' => 'COMUNA SOCIALISTA FLOR MONTIEL',
+                'committe' => 'UNIDAD ADMINISTRATIVA',
+                'council' => 'CORAZÓN DE MI PATRIA'
             ],
             [
                 'firstName' => 'Cesar',
@@ -67,38 +58,34 @@ class PersonSeeder extends Seeder
                 'date' => '05-10-05',
                 'password' => 'v31225769',
                 'cityId' => 311,
-                'roles' => [
-                    'ADMINISTRADOR'
-                ],
-                'comunity' => 'CACHIRI',
-                'committe' => 'ADMINISTRATIVA',
-                'council' => 'SAN MAGALLAN'
+                'roles' => ['ADMINISTRADOR'],
+                'comunity' => 'COMUNA SOCIALISTA FLOR MONTIEL',
+                'committe' => 'UNIDAD ADMINISTRATIVA',
+                'council' => 'ESTRELLA DE BELÉN'
             ]
         ];
         
-        foreach($arrPerson as $key => $data){
-            $comunities = $data['comunity'];
-            $committes = $data['committe'];
-            $council = $data['council'];
+        foreach($arrPerson as $data){
+            $comunityName = $data['comunity'];
+            $committeName = $data['committe'];
+            $councilName = $data['council'];
             $rolesNames = $data['roles'];
 
             unset($data['roles'], $data['comunity'], $data['council'], $data['committe']);
 
             $person = Person::create($data);
             
-            foreach($rolesNames as $key => $roleName){
-                $roles = Role::where('roleName', $roleName)->first();
-                if($roles){
-                    PersonRole::create(
-                        [
-                            'personId' => $person->id,
-                            'roleId' => $roles->id
-                        ]
-                    );
+            foreach($rolesNames as $roleName){
+                $role = Role::where('roleName', $roleName)->first();
+                if($role){
+                    PersonRole::create([
+                        'personId' => $person->id,
+                        'roleId' => $role->id
+                    ]);
                 }
             }
             
-            $findComunity = Comunity::where('comunityName', $comunities)->first();
+            $findComunity = Comunity::where('comunityName', $comunityName)->first();
             if($findComunity){
                 PersonComunity::create([
                     'personId' => $person->id,
@@ -106,7 +93,7 @@ class PersonSeeder extends Seeder
                 ]);
             }
             
-            $findCouncil = Council::where('councilName', $council)->first();
+            $findCouncil = Council::where('councilName', $councilName)->first();
             if($findCouncil){
                 PersonCouncil::create([
                     'personId' => $person->id,
@@ -114,7 +101,7 @@ class PersonSeeder extends Seeder
                 ]);
             }
             
-            $findCommitte = Committee::where('committeeName', $committes)->first();
+            $findCommitte = Committee::where('committeeName', $committeName)->first();
             if($findCommitte){
                 PersonCommittees::create([
                     'personId' => $person->id,
