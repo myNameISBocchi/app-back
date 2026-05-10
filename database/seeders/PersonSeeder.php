@@ -20,8 +20,8 @@ class PersonSeeder extends Seeder
     {
         $arrPerson = [
             [
-                'firstName' => 'Alfonso',
-                'lastName' => 'Espina',
+                'firstName' => 'ALFONSO',
+                'lastName' => 'ESPINA',
                 'email' => 'espinaalfonso123@gmail.com',
                 'phone' => '0414-651-0323',
                 'identification' => '31478490',
@@ -35,8 +35,8 @@ class PersonSeeder extends Seeder
                 'council' => 'MANANTIAL DE CUJI'
             ],
             [
-                'firstName' => 'Abubeiker',
-                'lastName' => 'Olivares',
+                'firstName' => 'ABUBEIKER',
+                'lastName' => 'OLIVARES',
                 'email' => 'Abubeikeo@gmail.com',
                 'phone' => '0412-456-7890',
                 'identification' => '31671119',
@@ -50,8 +50,8 @@ class PersonSeeder extends Seeder
                 'council' => 'CORAZÓN DE MI PATRIA'
             ],
             [
-                'firstName' => 'Cesar',
-                'lastName' => 'Fuenmayor',
+                'firstName' => 'CESAR',
+                'lastName' => 'FUENMAYOR',
                 'email' => 'cesaralexff2019@gmail.com',
                 'phone' => '0414-567-8901',
                 'identification' => '31225769',
