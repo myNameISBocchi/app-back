@@ -26,4 +26,10 @@ class Person extends Model
             $this->attributes['password'] = Hash::make($value);
         }
     }
+    public function setFirsNameAttribute($value){
+        $this->attributtes['firstName'] = mb_strtoupper($value, 'UTF-8');
+    }
+    public function setLastNameAttribute($value){
+        $this->attributes['lastName'] = mb_strtoupper($value, 'UTF-8');
+    }
 }

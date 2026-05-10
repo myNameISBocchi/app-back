@@ -12,6 +12,7 @@ use App\Models\PersonCouncil;
 use App\Models\PersonRole;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class PersonSeeder extends Seeder
 {
@@ -25,11 +26,11 @@ class PersonSeeder extends Seeder
                 'phone' => '0414-651-0323',
                 'identification' => '31478490',
                 'status' => 1,
-                'date' => '05-10-05',
+                'date' => '2005-10-05',
                 'password' => 'v31478490',
                 'cityId' => 311,
                 'roles' => ['ADMINISTRADOR'],
-                'comunity' => 'COMUNA SOCIALISTA FLOR MONTIEL',
+                'comunity' => 'MANANTIAL DEL CUI',
                 'committe' => 'UNIDAD ADMINISTRATIVA',
                 'council' => 'MANANTIAL DE CUJI'
             ],
@@ -40,11 +41,11 @@ class PersonSeeder extends Seeder
                 'phone' => '0412-456-7890',
                 'identification' => '31671119',
                 'status' => 1,
-                'date' => '05-10-05',
+                'date' => '2005-10-05',
                 'password' => 'v31671119',
                 'cityId' => 311,
                 'roles' => ['ADMINISTRADOR'],
-                'comunity' => 'COMUNA SOCIALISTA FLOR MONTIEL',
+                'comunity' => 'ESTRELLA DE BELÉN',
                 'committe' => 'UNIDAD ADMINISTRATIVA',
                 'council' => 'CORAZÓN DE MI PATRIA'
             ],
@@ -55,11 +56,11 @@ class PersonSeeder extends Seeder
                 'phone' => '0414-567-8901',
                 'identification' => '31225769',
                 'status' => 1,
-                'date' => '05-10-05',
+                'date' => '2005-10-05',
                 'password' => 'v31225769',
                 'cityId' => 311,
                 'roles' => ['ADMINISTRADOR'],
-                'comunity' => 'COMUNA SOCIALISTA FLOR MONTIEL',
+                'comunity' => 'ESTRELLA DE BELÉN',
                 'committe' => 'UNIDAD ADMINISTRATIVA',
                 'council' => 'ESTRELLA DE BELÉN'
             ]
