@@ -5,20 +5,25 @@ use App\Http\Controllers\citieController;
 use App\Http\Controllers\CommitteeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\ComunityController;
 use App\Http\Controllers\CouncilController;
 use App\Http\Controllers\countryController;
 use App\Http\Controllers\personController;
 use App\Http\Controllers\privilegesController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\roleController;
 use App\Http\Controllers\rolePrivilegeController;
 use App\Http\Controllers\stateController;
 
 Route::post('/loggin', [AuthController::class, 'loggin']);
 
+
 Route::middleware('auth')->group(function () {
+    
 
     Route::middleware('auth:ADMINISTRADOR,LIDER DE COMUNA,VOCERO')->group(function () {
+        Route::get('/reporte/voceros', [ReportController::class, 'imprimirVoceros']);
         Route::get('/comunities', [ComunityController::class, 'findAll']);
         Route::get('/councils', [CouncilController::class, 'findAll']);
         Route::get('/councils/bycomunity/{comunityId}', [CouncilController::class, 'findByComunity']);
@@ -27,10 +32,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/cities', [citieController::class, 'findAll']);
         Route::get('/countries', [countryController::class, 'findAll']);
         Route::get('/states', [stateController::class, 'findAll']);
+        Route::get('/peoples/search', [personController::class, 'searchPerson']);
         Route::get('/peoples/{id}', [personController::class, 'findById']);
+        
     });
 
     Route::middleware('auth:ADMINISTRADOR,LIDER DE COMUNA')->group(function () {
+        
         Route::post('/comunities', [ComunityController::class, 'store']);
         Route::put('/comunities/{id}', [ComunityController::class, 'update']);
         Route::delete('/comunities/{id}', [ComunityController::class, 'delete']);
@@ -45,7 +53,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/committees/{id}',[CommitteeController::class,'delete']);
 
         Route::post('/peoples', [personController::class, 'store']);
-        Route::get('/peoples/search', [personController::class, 'searchPerson']);
+        
         
         Route::put('/peoples/{id}', [personController::class, 'update']);
         Route::post('/peoples/{id}/photo', [personController::class, 'uploadPhoto']);

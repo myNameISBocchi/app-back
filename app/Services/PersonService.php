@@ -7,6 +7,7 @@ use App\Models\PersonCouncil;
 use App\Models\PersonRole;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class PersonService{
@@ -200,7 +201,7 @@ class PersonService{
 
     }
 
-    public function searchPerson(array $filters = [])
+  public function searchPerson(array $filters = [])
 {
     $query = Person::query()
         ->select(
@@ -221,7 +222,6 @@ class PersonService{
             'councils.councilName',
             'committees.committeeName'
         )
-        
         ->join('cities', 'peoples.cityId', '=', 'cities.id')
         ->join('states', 'cities.stateId', '=', 'states.id')
         ->join('countries', 'states.countryId', '=', 'countries.id')
@@ -230,11 +230,11 @@ class PersonService{
         ->leftJoin('peoples_councils', 'peoples.id', '=', 'peoples_councils.personId')
         ->leftJoin('councils', 'peoples_councils.councilId', '=', 'councils.id')
         ->leftJoin('peoples_committees', 'peoples.id', '=', 'peoples_committees.personId')
-        ->leftJoin('committees', 'peoples_committees.committeeId', '=', 'committees.id');
+        ->leftJoin('committees', 'peoples_committees.committeeId', '=', 'committees.id')
+        ->distinct();
 
     if (!empty($filters['firstName'])) {
         $term = $filters['firstName'];
-        
         $query->where(function($q) use ($term) {
             $q->where('peoples.firstName', 'LIKE', '%' . $term . '%')
               ->orWhere('peoples.lastName', 'LIKE', '%' . $term . '%')
@@ -245,14 +245,17 @@ class PersonService{
         });
     }
 
-    if (!empty($filters['comunityId'])) {
-        $query->where('comunities.id', Crypt::decrypt($filters['comunityId']));
-    }
-    if (!empty($filters['councilId'])) {
-        $query->where('councils.id', Crypt::decrypt($filters['councilId']));
-    }
-    if (!empty($filters['committeeId'])) {
-        $query->where('committees.id', Crypt::decrypt($filters['committeeId']));
+    try {
+        if (!empty($filters['comunityId'])) {
+            $query->where('comunities.id', Crypt::decrypt($filters['comunityId']));
+        }
+        if (!empty($filters['councilId'])) {
+            $query->where('councils.id', Crypt::decrypt($filters['councilId']));
+        }
+        if (!empty($filters['committeeId'])) {
+            $query->where('committees.id', Crypt::decrypt($filters['committeeId']));
+        }
+    } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
     }
 
     return $query->get()->map(function($object) {
@@ -264,18 +267,15 @@ class PersonService{
         $object->roleName = implode(', ', $roles);
         $object->blocked = DB::table('peoples_roles')->where('personId', $object->personId)->exists();
         
-        
         $object->locality = [
             'city' => $object->city,
             'state' => $object->state,
             'country' => $object->country
         ];
 
-      
         $personIdEncrypt = Crypt::encrypt($object->personId);
         $cityIdEncrypt = Crypt::encrypt($object->cityId);
 
-       
         unset($object->city, $object->state, $object->country, $object->cityId);
 
         $object->personId = $personIdEncrypt;
@@ -334,8 +334,17 @@ public function updateRoles(string $id, array $roleId){
     });
 
 }
+
+
+public function getVocerosByConsejo(array $filters = [])
+{
+    
+    $personas = $this->searchPerson($filters); 
+
+    return $personas->groupBy('committeeName');
+}
+
 }
 
 
 
-?>

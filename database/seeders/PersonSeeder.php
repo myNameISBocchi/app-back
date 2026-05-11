@@ -63,6 +63,21 @@ class PersonSeeder extends Seeder
                 'comunity' => 'ESTRELLA DE BELÉN',
                 'committe' => 'UNIDAD ADMINISTRATIVA',
                 'council' => 'ESTRELLA DE BELÉN'
+            ],
+            [
+                'firstName' => 'JUNIOR',
+                'lastName' => 'JEPLLACH',
+                'email' => 'jepllach@gmail.com',
+                'phone' => '0414-666-3755',
+                'identification' => '17414324',
+                'status' => 1,
+                'date' => '2005-10-05',
+                'password' => 'v17414324',
+                'cityId' => 311,
+                'roles' => ['ADMINISTRADOR'],
+                'comunity' => 'ESTRELLA DE BELÉN',
+                'committe' => 'UNIDAD ADMINISTRATIVA',
+                'council' => 'ESTRELLA DE BELÉN'
             ]
         ];
         

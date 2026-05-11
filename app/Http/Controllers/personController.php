@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Message;
 use App\Services\PersonService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -203,4 +204,8 @@ class personController extends Controller
         }
 
     }
+
+    
+
+    
 }
