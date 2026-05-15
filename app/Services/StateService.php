@@ -56,6 +56,10 @@ class StateService{
         return true;
 
     }
+
+    public function getStateByCountry(string $countryId){
+
+    }
     
 }
 

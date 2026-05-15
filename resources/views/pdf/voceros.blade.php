@@ -33,9 +33,8 @@
 </head>
 <body>
     <div class="header">
-        <h2>VOCEROS DEL CONSEJO: {{ $councilName ?? 'GENERAL' }}</h2>
-        <p class="bold">COMUNA SOCIALISTA FLOR MONTIEL</p>
-    </div>
+    <h2>{{ $title }}</h2> <p class="bold">COMUNA SOCIALISTA FLOR MONTIEL</p>
+</div>
 
     @foreach($group as $comite => $voceros)
         <table>

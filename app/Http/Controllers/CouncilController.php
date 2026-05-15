@@ -33,9 +33,10 @@ class CouncilController extends Controller
         }
 
     }
-    public function findAll(){
+    public function findAll(Request $req){
         try{
-            $findAll = $this->councilService->findAll();
+            $perPage = $req->query('perPage', 10);
+            $findAll = $this->councilService->findAll($perPage);
             if($findAll){
                 $res = [
                     'error' => 0,

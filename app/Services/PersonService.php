@@ -345,6 +345,3 @@ public function getVocerosByConsejo(array $filters = [])
 }
 
 }
-
-
-

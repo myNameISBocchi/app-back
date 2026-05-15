@@ -36,9 +36,10 @@ class personController extends Controller
             return response()->json(['error' => 500, Message::errorServer()]);
         }
     }
-    public function findAll(){
+    public function findAll(Request $req){
         try{
-            $findAll = $this->personService->findAll();
+            $perPage = $req->query('perPage',10);
+            $findAll = $this->personService->findAll($perPage);
             if($findAll){
                 $res = [
                     'error'=> 0,
@@ -161,7 +162,8 @@ class personController extends Controller
            ]
         );
 
-        $search = $this->personService->searchPerson($filters);
+        $perPage = $req->query('perPage',10);
+        $search = $this->personService->searchPerson($filters, $perPage);
         if($search){
             $res = [
                 'error' => 0,
@@ -173,7 +175,7 @@ class personController extends Controller
             $res = [
                 'error' => 1,
                 'msg' => 'No se encontraron los registros',
-                'results' => []
+                'results' => $search
             ];
             return response()->json($res,200);
         }

@@ -46,6 +46,10 @@ class CitieService{
         Citie::where('id', '=', $idDecrypted)->delete();
         return true;
     }
+
+    public function getCityByStateId($stateId){
+
+    }
 }
 
 ?>
